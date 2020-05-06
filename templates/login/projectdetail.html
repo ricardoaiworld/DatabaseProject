@@ -6,11 +6,11 @@
 </head>
 <body>
 <h1>{{ request.session.user_name }},  Welcome back！</h1>
-<h2>Project List</h2>
+<h2>Issue List</h2>
 <p>
-    <ul>
-    {%for pid, pname, uid, pdscpt in record_list%}
-    <li><pre><a href="/projectdetail/?pid={{pid}}">{{pid}}</a>    {{pname}}    {{pdscpt}}</pre></li>
+<ul>
+    {%for iid, dname, title, idscpt, wname, ctime in issue_list%}
+    <li><pre><a href="/projectdetail/?iid={{iid}}">{{iid}}</a>    {{dname}}    {{title}}    {{idscpt}}    {{wname}}    {{ctime}}</pre></li>
     {%endfor%}
     </ul>
 </p>

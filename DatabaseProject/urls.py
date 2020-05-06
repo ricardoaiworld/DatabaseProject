@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.urls import re_path
 from django.conf.urls import url
 from app_demo import views
 
@@ -23,5 +24,6 @@ urlpatterns = [
     path('index/', views.index),
     path('login/', views.login),
     path('logout/', views.logout),
+    re_path(r'^projectdetail/$', views.projectdetail),
 
 ]

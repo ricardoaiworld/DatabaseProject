@@ -4,9 +4,8 @@ import pymysql
 from django.http import HttpResponse
 
 
-#db = pymysql.connect("localhost", "root", "12345678", "Bug_Report")
-db=pymysql.connect("localhost", "root", "root", "Bug_Report")
-cursor = db.cursor()
+db = pymysql.connect("localhost", "root", "12345678", "Bug_Report")
+#db=pymysql.connect("localhost", "root", "root", "Bug_Report")
 
 
 def login(request):
@@ -20,6 +19,7 @@ def login(request):
         message = "user name or password can't be empty"
         if username.strip() and password:
             sql = "SELECT uid,pswd FROM `user` WHERE dname=%s"
+            cursor = db.cursor()
             cursor.execute(sql, [username])
             result = cursor.fetchone()
             if result is None:
@@ -51,9 +51,19 @@ def logout(request):
 def index(request):
     if not request.session.get('is_login', None):
         return redirect('/login/')
-    #return render(request, 'login/index.html')
     sql = "SELECT * FROM project"
+    cursor = db.cursor()
     cursor.execute(sql, [])
     result = cursor.fetchall()
-    #print(result)
-    return render(request, 'login/index.html',{'record_list':result})
+    return render(request, 'login/index.html', {'record_list': result})
+
+
+def projectdetail(request):
+    if request.method == 'GET':
+        pid = request.GET.get('pid')
+        sql = "SELECT iid,dname,title,idscpt,wname,ctime FROM issue NATURAL JOIN workflow NATURAL JOIN user WHERE pid = %s"
+        cursor = db.cursor()
+        cursor.execute(sql, [pid])
+        result = cursor.fetchall()
+    return render(request, 'login/projectdetail.html', {'issue_list': result})
+
