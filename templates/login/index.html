@@ -6,6 +6,14 @@
 </head>
 <body>
 <h1>{{ request.session.user_name }}!  Welcome back！</h1>
+<h2>Project List</h2>
+<p>
+    <ul>
+    {%for record in record_list%}
+    <li><pre><a href="/logout/">{{record.0}}</a>    {{record.1}}    {{record.3}}</pre></li>
+    {%endfor%}
+    </ul>
+</p>
 <p>
     <a href="/logout/">logout</a>
 </p>
