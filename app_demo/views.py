@@ -4,7 +4,8 @@ import pymysql
 from django.http import HttpResponse
 
 
-db = pymysql.connect("localhost", "root", "12345678", "Bug_Report")
+#db = pymysql.connect("localhost", "root", "12345678", "Bug_Report")
+db=pymysql.connect("localhost", "root", "root", "Bug_Report")
 cursor = db.cursor()
 
 
@@ -21,11 +22,13 @@ def login(request):
             sql = "SELECT uid,pswd FROM `user` WHERE dname=%s"
             cursor.execute(sql, [username])
             result = cursor.fetchone()
-            uid, pswd = result
             if result is None:
                 message = "No such user"
                 return render(request, 'login/login.html', locals())
             else:
+                #when result is null
+                #uid, pswd = result report error
+                uid, pswd = result
                 if pswd == password:
                     request.session['is_login'] = True
                     request.session['user_id'] = uid
@@ -48,11 +51,9 @@ def logout(request):
 def index(request):
     if not request.session.get('is_login', None):
         return redirect('/login/')
-    return render(request, 'login/index.html')
-    '''
-    sql = "SELECT pname, pdscpt FROM project WHERE uid = %s"
+    #return render(request, 'login/index.html')
+    sql = "SELECT * FROM project"
     cursor.execute(sql, [])
     result = cursor.fetchall()
-    print(result)
-    '''
-    return render(request, 'login/index.html')
+    #print(result)
+    return render(request, 'login/index.html',{'record_list':result})
