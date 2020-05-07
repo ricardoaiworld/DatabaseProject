@@ -25,5 +25,5 @@ urlpatterns = [
     path('login/', views.login),
     path('logout/', views.logout),
     re_path(r'^projectdetail/$', views.projectdetail),
-
+    re_path(r'^issuedetail/$', views.issuedetail),
 ]
