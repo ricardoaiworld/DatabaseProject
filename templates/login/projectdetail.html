@@ -10,12 +10,15 @@
 <p>
 <ul>
     {%for iid, dname, title, idscpt, wname, ctime in issue_list%}
-    <li><pre><a href="/projectdetail/?iid={{iid}}">{{iid}}</a>    {{dname}}    {{title}}    {{idscpt}}    {{wname}}    {{ctime}}</pre></li>
+    <li><pre><a href="/issuedetail/?iid={{iid}}">{{iid}}</a>    {{dname}}    {{title}}    {{idscpt}}    {{wname}}    {{ctime}}</pre></li>
     {%endfor%}
     </ul>
 </p>
+
+
 <p>
     <a href="/logout/">logout</a>
+    <a href="/index/">back</a>
 </p>
 </body>
 </html>

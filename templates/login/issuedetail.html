@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>our database project</title>
+</head>
+<body>
+<h1>{{ request.session.user_name }},  Welcome back！</h1>
+<h2>Issue Log History</h2>
+<p>
+<ul>
+    {%for iid, pid, updatedata, new_wname, dname, wname in issue_history%}
+    <li><pre>{{iid}}    {{pid}}    {{updatedata}}    {{new_wname}}    {{dname}}    {{wname}}</pre></li>
+    {%endfor%}
+    </ul>
+</p>
+<h3>Current Status</h3>
+<p>
+<ul>
+    <li><pre>{{issue_current.0}}    {{issue_current.1}}    {{issue_current.2}}    {{issue_current.3}}    {{issue_current.4}}    {{issue_current.5}}</pre></li>
+    </ul>
+</p>
+
+ <form action="/login/" method="post">
+           {% if message %}
+               <div class="alert alert-warning">{{ message }}</div>
+           {% endif %}
+           {% csrf_token %}
+            <p>
+                <label for="issue_title">title：</label>
+                <input type="text" id="issue_title" name="title" placeholder="new title"  required />
+                <label for="issue_descr">IssueDescr：</label>
+                <input type="text" id="issue_descr" placeholder="New Descr" name="IssueDescr" required >
+            </p>
+            <input type="submit" value="Change">
+        </form>
+<p>
+    <a href="/logout/">logout</a>
+    <a href="/index/">back</a>
+</p>
+</body>
+</html>
