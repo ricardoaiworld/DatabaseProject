@@ -10,7 +10,7 @@
 <p>
 <ul>
     {%for iid, pid, updatedata, new_wname, dname, wname in issue_history%}
-    <li><pre>{{iid}}    {{pid}}    {{updatedata}}    {{new_wname}}    {{dname}}    {{wname}}</pre></li>
+    <li><pre> {{iid}}   {{pid}}    {{updatedata}}    {{new_wname}}    {{dname}}    {{wname}}</pre></li>
     {%endfor%}
     </ul>
 </p>
@@ -21,7 +21,7 @@
     </ul>
 </p>
 
- <form action="/login/" method="post">
+ <form action="/issuedetail/" method="post">
            {% if message %}
                <div class="alert alert-warning">{{ message }}</div>
            {% endif %}
@@ -32,8 +32,21 @@
                 <label for="issue_descr">IssueDescr：</label>
                 <input type="text" id="issue_descr" placeholder="New Descr" name="IssueDescr" required >
             </p>
-            <input type="submit" value="Change">
+            <button type="submit" name="button1">Apply Change</button>
         </form>
+
+<p>
+    <form action="/issuedetail/" method="post">
+           {% if message %}
+               <div class="alert alert-warning">{{ message }}</div>
+           {% endif %}
+           {% csrf_token %}
+            <p>
+                <select></select>
+            </p>
+            <button type="submit" name="button2">Change Status</button>
+        </form>
+</p>
 <p>
     <a href="/logout/">logout</a>
     <a href="/index/">back</a>
