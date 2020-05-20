@@ -7,6 +7,7 @@ from django.http import HttpResponse
 #db = pymysql.connect("localhost", "root", "12345678", "Bug_Report")
 db=pymysql.connect("localhost", "root", "root", "Bug_Report")
 
+
 def login(request):
     if request.session.get('is_login', None):
         return redirect('/index')
@@ -67,6 +68,19 @@ def projectdetail(request):
         result = cursor.fetchall()
         return render(request, 'login/projectdetail.html', {'issue_list': result})
     if request.method == 'POST' and 'button1' in request.POST:
+<<<<<<< HEAD
+        sql="insert into issue(uid,pid,title,idscpt,wid,ctime) values(%s,%s,%s,%s,1,NOW())"
+        cursor=db.cursor()
+        new_issue_title=request.POST['title']
+        new_issue_describe=request.POST.get('describe',False)
+        cursor.execute(sql,[request.session['user_id'],pid,new_issue_title,new_issue_describe])
+        db.commit()
+        sql = "SELECT iid,dname,title,idscpt,wname,ctime FROM issue NATURAL JOIN workflow NATURAL JOIN user WHERE pid = %s"
+        cursor = db.cursor()
+        cursor.execute(sql, [pid])
+        result = cursor.fetchall()
+        return render(request, 'login/projectdetail.html', {'issue_list': result})
+=======
           sql="insert into issue values(%s,%s,%s,%s,1,now())"
           cursor=db.cursor()
           new_issue_title=request.POST['title']
@@ -80,6 +94,7 @@ def projectdetail(request):
           result = cursor.fetchall()
           return render(request, 'login/projectdetail.html', {'issue_list': result})
 
+>>>>>>> ee6a151bea43b285c6e78e804e0ec5c33ce1e9c8
 
 
 def issuedetail(request):
