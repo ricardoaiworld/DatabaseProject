@@ -10,11 +10,14 @@
 <p>
     <ul>
     {%for pid, pname, uid, pdscpt in record_list%}
-    <li><pre><a href="/projectdetail/?pid={{pid}}">{{pid}}</a>    {{pname}}    {{pdscpt}}</pre></li>
+    <li><pre><a href="/projectdetail/?pid={{pid}}">{{pid}}</a>    {{pname}}    {{pdscpt}}    </pre></li>
     {%endfor%}
     </ul>
 </p>
 <p>
+<li><pre><a href="/myproject/?uid={{request.session.user_id}}">{{"my projects"}}</a></pre></li>
+<li><pre><a href="/myassignment/?uid={{request.session.user_id}}">{{"issues assigned to me"}}</a></pre></li>
+
     <a href="/logout/">logout</a>
 </p>
 </body>

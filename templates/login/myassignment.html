@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>our database project</title>
+</head>
+<body>
+<h1>{{ request.session.user_name }},  Welcome back！<a href="/logout/">logout</a></h1>
+<h2>My Issues</h2>
+<p>
+    <ul>
+    {%for iid, dname, title,idscpt,wname,ctime in my_issue_list%}
+    <li><pre><a href="/issuedetail/?iid={{iid}}">{{iid}}</a>    {{dname}}    {{title}}    {{ idscpt }}    {{ wname }}    {{ ctime }}</pre></li>
+    {%endfor%}
+    </ul>
+</p>
+<form action="/myproject/" method="post">
+           {% if message %}
+               <div class="alert alert-warning">{{ message }}</div>
+           {% endif %}
+           {% csrf_token %}
+            <p>
+                <label for="project">project：</label>
+                <select name="project_id">
+                    {%for item in my_project_list%}
+                        <option value="{{ item.0 }}">{{ item.0 }}</option>
+                    {%endfor%}
+                </select>
+                <label for="add_leader">add leader：</label>
+                <input type="text" id="user_id" placeholder="Enter id of the user" name="user_id" required >
+            </p>
+            <button type="submit" name="assign">Add</button>
+        </form>
+<p>
+    <a href="/index/">back</a>
+
+
+
+</p>
+</body>
+</html>

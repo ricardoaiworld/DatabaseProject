@@ -160,3 +160,60 @@ def issuedetail(request):
     cursor.execute(sql_getnextstatusname, [])
     statusname = cursor.fetchall()
     return render(request, 'login/issuedetail.html', {'issue_history':result, 'issue_current':result1, 'issue_nextstatus':statusname})
+
+
+def myproject(request):
+    if request.method == 'GET':
+        uid = request.GET.get('uid')
+        print(uid)
+        sql = "SELECT pid,pname,pdscpt FROM project WHERE uid=%s"
+        cursor = db.cursor()
+        cursor.execute(sql, [uid])
+        my_project_list = cursor.fetchall()
+        return render(request, 'login/myproject.html', {'my_project_list': my_project_list})
+    if request.method == 'POST' and 'assign' in request.POST:
+        pid = request.POST.get('project_id', False)
+        uid = request.POST.get('user_id', False)
+        sql_add_lead = "INSERT INTO `lead`(pid, uid) VALUES (%s, %s)"
+        cursor = db.cursor()
+        cursor.execute(sql_add_lead, [int(pid), int(uid)])
+        db.commit()
+        uid = request.session["user_id"]
+        sql="SELECT pid,pname,pdscpt FROM project WHERE uid=%s"
+        cursor = db.cursor()
+        cursor.execute(sql, [uid])
+        my_project_list = cursor.fetchall()
+        return render(request, 'login/myproject.html', {'my_project_list': my_project_list})
+
+def myissue(request):
+    if request.method == 'GET':
+        pid = request.GET.get('pid')
+        request.session['pid'] = pid
+        sql = "SELECT iid,dname,title,idscpt,wname,ctime FROM issue NATURAL JOIN workflow NATURAL JOIN user WHERE pid = %s"
+        cursor = db.cursor()
+        cursor.execute(sql, [pid])
+        result = cursor.fetchall()
+        return render(request, 'login/myissue.html', {'issue_list': result})
+    if request.method == 'POST' and 'assign' in request.POST:
+        iid = request.POST.get('issue_id', False)
+        uid = request.POST.get('user_id', False)
+        pid = request.session['pid']
+        sql_add_lead = "INSERT INTO assignment(iid, uid, pid) VALUES (%s, %s, %s)"
+        cursor = db.cursor()
+        cursor.execute(sql_add_lead, [int(iid), int(uid), pid])
+        db.commit()
+        sql = "SELECT iid,dname,title,idscpt,wname,ctime FROM issue NATURAL JOIN workflow NATURAL JOIN user WHERE pid = %s"
+        cursor = db.cursor()
+        cursor.execute(sql, [pid])
+        result = cursor.fetchall()
+        return render(request, 'login/myissue.html', {'issue_list': result})
+
+
+def myassignment(request):
+    if request.method == 'GET':
+        uid = request.session["user_id"]
+        sql = "SELECT iid,dname,title,idscpt,wname,ctime FROM issue NATURAL JOIN workflow NATURAL JOIN user WHERE uid = %s"
+        cursor = db.cursor()
+        cursor.execute(sql, [uid])
+        my_issue_list = cursor.fetchall()
+        return render(request, 'login/myassignment.html', {'my_issue_list': my_issue_list})
