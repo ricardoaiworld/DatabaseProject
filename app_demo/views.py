@@ -80,27 +80,31 @@ def projectdetail(request):
         cursor.execute(sql, [pid])
         result = cursor.fetchall()
         return render(request, 'login/projectdetail.html', {'issue_list': result})
-        sql="insert into issue values(%s,%s,%s,%s,1,now())"
-        cursor=db.cursor()
-        new_issue_title=request.POST['title']
-        new_issue_describe=request.POST.get('describe',False)
-        pid=request.session['pid']
-        cursor.execute(sql,[request.session['user_id'],pid,new_issue_title,new_issue_describe])
-        db.commit()
-        sql = "SELECT iid,dname,title,idscpt,wname,ctime FROM issue NATURAL JOIN workflow NATURAL JOIN user WHERE pid = %s"
-        cursor = db.cursor()
-        cursor.execute(sql, [pid])
-        result = cursor.fetchall()
-        return render(request, 'login/projectdetail.html', {'issue_list': result})
-    if request.method == 'POST' and 'search' in request.POST:
+    if request.method == 'POST' and 'button2' in request.POST:
         search_title = request.POST.get('search_title', False)
-        search_user = request.POST.get('search_user', False)
-        pid=request.session['pid']
-        sql_title = "SELECT iid, uname, title, idscpt, wname,ctime FROM issue NATURAL JOIN USER NATURAL JOIN workflow WHERE pid=%s and title like %s"
+        pid = request.session['pid']
+        sql_title = "SELECT iid, dname, title, idscpt, wname,ctime FROM issue NATURAL JOIN USER NATURAL JOIN workflow WHERE pid=%s and title like %s"
         cursor = db.cursor()
         cursor.execute(sql_title, [pid, "%"+search_title+"%"])
         issues = cursor.fetchall()
         return render(request, 'login/projectdetail.html', {'issue_list': issues})
+    if request.method == 'POST' and 'button3' in request.POST:
+        search_user = request.POST.get('search_name', False)
+        pid = request.session['pid']
+        sql_title = "SELECT iid, dname, title, idscpt, wname,ctime FROM issue NATURAL JOIN USER NATURAL JOIN workflow WHERE pid=%s and dname like %s"
+        cursor = db.cursor()
+        cursor.execute(sql_title, [pid, "%"+search_user+"%"])
+        issues = cursor.fetchall()
+        return render(request, 'login/projectdetail.html', {'issue_list': issues})
+    if request.method == 'POST' and 'button4' in request.POST:
+        time = request.POST.get('xxx', False)
+        pid = request.session['pid']
+        sql_filter_time = "SELECT iid, dname, title, idscpt, wname,ctime FROM issue NATURAL JOIN USER NATURAL JOIN workflow WHERE pid=%s and DATEA_SUB(NOW(), INTERVAL &s hour)< ctime"
+        cursor = db.cursor()
+        cursor.execute(sql_filter_time, [pid, time])
+        issues = cursor.fetchall()
+        return render(request, 'login/projectdetail.html', {'issue_list': issues})
+
 
 def issuedetail(request):
     global global_iid
