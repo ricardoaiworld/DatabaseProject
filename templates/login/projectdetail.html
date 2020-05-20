@@ -30,6 +30,44 @@
     </p>
 
 </form>
+<form action="/projectdetail/" method="post">
+    {% if message %}
+               <div class="alert alert-warning">{{ message }}</div>
+           {% endif %}
+           {% csrf_token %}
+    <p>
+        <label for="search_title">search_title</label>
+        <input type="text" id="search_title" name="search_title" placeholder="Enter what issue title you want to search" required/>
+        <button type="submit" name="button2">Search Issue table by issue title</button>
+    </p>
+</form>
+
+<form action="/projectdetail/" method="post">
+    {% if message %}
+               <div class="alert alert-warning">{{ message }}</div>
+           {% endif %}
+           {% csrf_token %}
+    <p>
+        <label for="search_name">search_name</label>
+        <input type="text" id="search_name" name="search_name" placeholder="Enter what user name you want to search" required/>
+        <button type="submit" name="button3">Search Issue table by user name</button>
+    </p>
+</form>
+
+    <form action="/projectdetail/" method="post">
+           {% if message %}
+               <div class="alert alert-warning">{{ message }}</div>
+           {% endif %}
+           {% csrf_token %}
+            <p>
+                <select name="Time scope">
+                    {%for status in issue_nextstatus%}
+                        <option value="{{ status.0 }}">{{ status.1 }}</option>
+                    {%endfor%}
+                </select>
+            </p>
+            <button type="submit" name="button4">filt</button>
+        </form>
 
 <p>
     <a href="/logout/">logout</a>
