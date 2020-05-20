@@ -4,8 +4,8 @@ import pymysql
 from django.http import HttpResponse
 
 
-#db = pymysql.connect("localhost", "root", "12345678", "Bug_Report")
-db=pymysql.connect("localhost", "root", "root", "Bug_Report")
+db = pymysql.connect("localhost", "root", "12345678", "Bug_Report")
+#db=pymysql.connect("localhost", "root", "root", "Bug_Report")
 
 
 def login(request):
