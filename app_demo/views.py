@@ -95,7 +95,6 @@ def issuedetail(request):
         cursor.execute(updatesql,[new_title,new_descr,iid])
         db.commit()
     if request.method=='POST' and 'button2' in request.POST:
-<<<<<<< HEAD
         iid = global_iid
         new_wid = request.POST.get('next_status', False)
         cursor = db.cursor()
@@ -110,11 +109,6 @@ def issuedetail(request):
         sql_updateissue = "UPDATE issue set wid=%s where iid=%s"
         cursor.execute(sql_updateissue, [new_wid, iid])
         db.commit()
-=======
-        startChangeStatus=0
-        
-    
->>>>>>> pr/4
     sql = "select iid,pid,updatedate,new_wname,dname,wname from (select iid,pid,updatedate,wname as new_wname,old_wid,uid from history join workflow on new_wid=wid) as B join workflow on old_wid=wid natural join user where iid = %s"
     cursor = db.cursor()
     cursor.execute(sql, [iid])
