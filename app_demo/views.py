@@ -58,13 +58,28 @@ def index(request):
 
 
 def projectdetail(request):
+    pid=0
     if request.method == 'GET':
         pid = request.GET.get('pid')
         sql = "SELECT iid,dname,title,idscpt,wname,ctime FROM issue NATURAL JOIN workflow NATURAL JOIN user WHERE pid = %s"
         cursor = db.cursor()
         cursor.execute(sql, [pid])
         result = cursor.fetchall()
-    return render(request, 'login/projectdetail.html', {'issue_list': result})
+        return render(request, 'login/projectdetail.html', {'issue_list': result})
+    if request.method == 'POST' and 'button1' in request.POST:
+          sql="insert into issue values(,%s,%s,%s,%s,1,now())"
+          cursor=db.cursor()
+          new_issue_title=request.POST['title'];
+          new_issue_describe=request.POST.get('describe',False)
+          cursor.execute(sql,[request.session['user_id'],pid,new_issue_title,new_issue_describe])
+          db.commit()
+          sql = "SELECT iid,dname,title,idscpt,wname,ctime FROM issue NATURAL JOIN workflow NATURAL JOIN user WHERE pid = %s"
+          cursor = db.cursor()
+          cursor.execute(sql, [pid])
+          result = cursor.fetchall()
+          return render(request, 'login/projectdetail.html', {'issue_list': result})
+
+
 
 def issuedetail(request):
     global global_iid
@@ -74,12 +89,13 @@ def issuedetail(request):
     if request.method=='POST' and 'button1' in request.POST:
         iid=global_iid
         new_title=request.POST['title']
-        new_descr=request.POST['IssueDescr']
+        new_descr=request.POST.get('IssueDescr',False);
         updatesql="update issue set title=%s,idscpt=%s where iid=%s"
         cursor=db.cursor()
         cursor.execute(updatesql,[new_title,new_descr,iid])
         db.commit()
     if request.method=='POST' and 'button2' in request.POST:
+<<<<<<< HEAD
         iid = global_iid
         new_wid = request.POST.get('next_status', False)
         cursor = db.cursor()
@@ -94,6 +110,11 @@ def issuedetail(request):
         sql_updateissue = "UPDATE issue set wid=%s where iid=%s"
         cursor.execute(sql_updateissue, [new_wid, iid])
         db.commit()
+=======
+        startChangeStatus=0
+        
+    
+>>>>>>> pr/4
     sql = "select iid,pid,updatedate,new_wname,dname,wname from (select iid,pid,updatedate,wname as new_wname,old_wid,uid from history join workflow on new_wid=wid) as B join workflow on old_wid=wid natural join user where iid = %s"
     cursor = db.cursor()
     cursor.execute(sql, [iid])
