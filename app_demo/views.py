@@ -4,8 +4,8 @@ import pymysql
 from django.http import HttpResponse
 
 
-db = pymysql.connect("localhost", "root", "12345678", "Bug_Report")
-#db=pymysql.connect("localhost", "root", "root", "Bug_Report")
+#db = pymysql.connect("localhost", "root", "12345678", "Bug_Report")
+db=pymysql.connect("localhost", "root", "root", "Bug_Report")
 
 def login(request):
     if request.session.get('is_login', None):
@@ -58,9 +58,9 @@ def index(request):
 
 
 def projectdetail(request):
-    pid=0
     if request.method == 'GET':
         pid = request.GET.get('pid')
+        request.session['pid'] = pid;
         sql = "SELECT iid,dname,title,idscpt,wname,ctime FROM issue NATURAL JOIN workflow NATURAL JOIN user WHERE pid = %s"
         cursor = db.cursor()
         cursor.execute(sql, [pid])
@@ -71,6 +71,7 @@ def projectdetail(request):
           cursor=db.cursor()
           new_issue_title=request.POST['title']
           new_issue_describe=request.POST.get('describe',False)
+          pid=request.session['pid']
           cursor.execute(sql,[request.session['user_id'],pid,new_issue_title,new_issue_describe])
           db.commit()
           sql = "SELECT iid,dname,title,idscpt,wname,ctime FROM issue NATURAL JOIN workflow NATURAL JOIN user WHERE pid = %s"
