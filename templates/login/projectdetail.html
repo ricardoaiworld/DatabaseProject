@@ -50,7 +50,7 @@
     <p>
         <label for="search_name">search_name</label>
         <input type="text" id="search_name" name="search_name" placeholder="Enter what user name you want to search" required/>
-        <button type="submit" name="button3">Search Issue table by user name</button>
+        <button type="submit" name="button3">Filter Issue by user name</button>
     </p>
 </form>
 
@@ -59,14 +59,16 @@
                <div class="alert alert-warning">{{ message }}</div>
            {% endif %}
            {% csrf_token %}
-            <p>
+            <p>Filter(Use time to filter issue):
                 <select name="Time scope">
-                    {%for status in issue_nextstatus%}
-                        <option value="{{ status.0 }}">{{ status.1 }}</option>
-                    {%endfor%}
+                    <option value="1">During 1 Hour</option>
+                    <option value="24">During 1 Day</option>
+                    <option value="168">During 1 Week</option>
+                    <option value="720">During 1 One Month</option>
                 </select>
+                <button type="submit" name="button4">Filter By Time </button>
             </p>
-            <button type="submit" name="button4">filt</button>
+
         </form>
 
 <p>
