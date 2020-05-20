@@ -15,6 +15,21 @@
     </ul>
 </p>
 
+<form action="/projectdetail/" method="post">
+    {% if message %}
+
+            <div class="alert alert-warning">{{ message }}</div>
+    {% endif %}
+    {% csrf_token %}
+     <p>
+         <label for="new_issue_title">title：</label>
+         <input type="text" id="new_issue_title" name="title" placeholder="new_title"  required />
+         <label for="new_issue_describe">describe：</label>
+         <input type="text" id="new_issue_describe" name="describe" placeholder="new_describe"  required />
+         <button type="submit" name="button1">Report This New Issue</button>
+    </p>
+
+</form>
 
 <p>
     <a href="/logout/">logout</a>
