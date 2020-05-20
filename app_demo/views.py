@@ -68,9 +68,9 @@ def projectdetail(request):
         result = cursor.fetchall()
         return render(request, 'login/projectdetail.html', {'issue_list': result})
     if request.method == 'POST' and 'button1' in request.POST:
-          sql="insert into issue values(,%s,%s,%s,%s,1,now())"
+          sql="insert into issue values(%s,%s,%s,%s,1,now())"
           cursor=db.cursor()
-          new_issue_title=request.POST['title'];
+          new_issue_title=request.POST['title']
           new_issue_describe=request.POST.get('describe',False)
           cursor.execute(sql,[request.session['user_id'],pid,new_issue_title,new_issue_describe])
           db.commit()
@@ -90,7 +90,7 @@ def issuedetail(request):
     if request.method=='POST' and 'button1' in request.POST:
         iid=global_iid
         new_title=request.POST['title']
-        new_descr=request.POST.get('IssueDescr',False);
+        new_descr=request.POST.get('IssueDescr',False)
         updatesql="update issue set title=%s,idscpt=%s where iid=%s"
         cursor=db.cursor()
         cursor.execute(updatesql,[new_title,new_descr,iid])
