@@ -42,7 +42,11 @@
            {% endif %}
            {% csrf_token %}
             <p>
-                <select></select>
+                <select name="next_status">
+                    {%for status in issue_nextstatus%}
+                        <option value="{{ status.0 }}">{{ status.1 }}</option>
+                    {%endfor%}
+                </select>
             </p>
             <button type="submit" name="button2">Change Status</button>
         </form>

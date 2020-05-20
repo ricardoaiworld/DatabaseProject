@@ -4,15 +4,8 @@ import pymysql
 from django.http import HttpResponse
 
 
-<<<<<<< HEAD
 db = pymysql.connect("localhost", "root", "12345678", "Bug_Report")
 #db=pymysql.connect("localhost", "root", "root", "Bug_Report")
-
-=======
-#db = pymysql.connect("localhost", "root", "12345678", "Bug_Report")
-db=pymysql.connect("localhost", "root", "root", "Bug_Report")
-global_iid=""
->>>>>>> 972376f5887d43cadf471bff4423972ff1d12446
 
 def login(request):
     if request.session.get('is_login', None):
@@ -85,8 +78,22 @@ def issuedetail(request):
         updatesql="update issue set title=%s,idscpt=%s where iid=%s"
         cursor=db.cursor()
         cursor.execute(updatesql,[new_title,new_descr,iid])
+        db.commit()
     if request.method=='POST' and 'button2' in request.POST:
-        startChangeStatus=0
+        iid = global_iid
+        new_wid = request.POST.get('next_status', False)
+        cursor = db.cursor()
+        cursor.execute("SELECT pid,wid FROM issue WHERE iid=%s", [iid])
+        result = cursor.fetchone()
+        pid = result[0]
+        old_wid = result[1]
+        uid = request.session['user_id']
+        sql_updatehistory = "INSERT INTO history(iid,pid,updatedate,old_wid,new_wid,uid) values (%s,%s,NOW(),%s,%s,%s)"
+        cursor.execute(sql_updatehistory, [iid, pid, old_wid, new_wid, uid])
+        db.commit()
+        sql_updateissue = "UPDATE issue set wid=%s where iid=%s"
+        cursor.execute(sql_updateissue, [new_wid, iid])
+        db.commit()
     sql = "select iid,pid,updatedate,new_wname,dname,wname from (select iid,pid,updatedate,wname as new_wname,old_wid,uid from history join workflow on new_wid=wid) as B join workflow on old_wid=wid natural join user where iid = %s"
     cursor = db.cursor()
     cursor.execute(sql, [iid])
@@ -97,4 +104,17 @@ def issuedetail(request):
     sql2="SELECT iid,dname,title,idscpt,wname,ctime FROM issue NATURAL JOIN workflow NATURAL JOIN user WHERE pid = %s and iid=%s"
     cursor.execute(sql2, [pid,iid])
     result1 = cursor.fetchone()
-    return render(request, 'login/issuedetail.html', {'issue_history':result, 'issue_current':result1})
+    sql_getwid = "SELECT wid FROM issue WHERE iid=%s"
+    cursor.execute(sql_getwid, [iid])
+    curr_status = cursor.fetchone()[0]
+    sql_getnextstatus = "SELECT next_wid FROM flowrelationship WHERE wid=%s"
+    cursor.execute(sql_getnextstatus, [curr_status])
+    nextstatus = cursor.fetchall()
+    status_list = "("
+    for status in nextstatus:
+        status_list += str(status[0]) + ","
+    status_list = status_list[:-1] + ")"
+    sql_getnextstatusname = "SELECT wid,wname FROM workflow WHERE wid in" + status_list
+    cursor.execute(sql_getnextstatusname, [])
+    statusname = cursor.fetchall()
+    return render(request, 'login/issuedetail.html', {'issue_history':result, 'issue_current':result1, 'issue_nextstatus':statusname})
