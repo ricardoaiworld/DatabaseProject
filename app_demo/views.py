@@ -4,8 +4,8 @@ import pymysql
 from django.http import HttpResponse
 
 
-#db = pymysql.connect("localhost", "root", "12345678", "Bug_Report")
-db=pymysql.connect("localhost", "root", "root", "Bug_Report")
+db = pymysql.connect("localhost", "root", "12345678", "Bug_Report")
+#db=pymysql.connect("localhost", "root", "root", "Bug_Report")
 
 
 def login(request):
@@ -209,7 +209,7 @@ def issuedetail(request):
     cursor = db.cursor()
     cursor.execute(sql, [iid])
     result = cursor.fetchall()
-    sql1="SELECT pid from history where iid=%s"
+    sql1="SELECT pid from issue where iid=%s"
     cursor.execute(sql1,[iid])
     pid=cursor.fetchone()
     sql2="SELECT iid,dname,title,idscpt,wname,ctime FROM issue NATURAL JOIN workflow NATURAL JOIN user WHERE pid = %s and iid=%s"
@@ -228,7 +228,14 @@ def issuedetail(request):
     sql_getnextstatusname = "SELECT wid,wname FROM workflow WHERE wid in" + status_list
     cursor.execute(sql_getnextstatusname, [])
     statusname = cursor.fetchall()
-    return render(request, 'login/issuedetail.html', {'issue_history':result, 'issue_current':result1, 'issue_nextstatus':statusname})
+    uid = request.session["user_id"]
+    sql = "SELECT iid FROM assignment WHERE uid=%s"
+    cursor.execute(sql, uid)
+    iid_list = cursor.fetchall()
+    if (int(global_iid),) in iid_list:
+        return render(request, 'login/issuedetail.html', {'issue_history':result, 'issue_current':result1, 'issue_nextstatus':statusname,})
+    else:
+        return render(request, 'login/issuedetail.html', {'issue_history':result, 'issue_current':result1, 'issue_nextstatus':statusname, 'permission':[False]})
 
 
 def myproject(request):
