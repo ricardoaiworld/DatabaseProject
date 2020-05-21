@@ -243,9 +243,9 @@ def myproject(request):
     if request.method == 'GET':
         uid = request.GET.get('uid')
         print(uid)
-        sql = "SELECT pid,pname,pdscpt FROM project WHERE uid=%s"
+        sql = "SELECT `lead`.pid,pname,pdscpt FROM `lead` JOIN project on `lead`.pid = project.pid  WHERE `lead`.uid=%s"
         cursor = db.cursor()
-        cursor.execute(sql, [uid])
+        cursor.execute(sql, [int(uid)])
         my_project_list = cursor.fetchall()
         return render(request, 'login/myproject.html', {'my_project_list': my_project_list})
     if request.method == 'POST' and 'assign' in request.POST:
