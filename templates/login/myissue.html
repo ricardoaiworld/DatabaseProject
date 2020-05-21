@@ -68,12 +68,32 @@
 <li><a href="/logout/">logout</a></li>
 <li><a href="/index/">back</a></li>
     </ul>
-<h2>Issue List</h2>
-<p>
+<div>
+        <h2>Issue List</h2>
+    <p>
+    <table>
+    <tr>
+        <th>Issue ID</th>
+        <th>User Name</th>
+        <th>Issue Title</th>
+        <th>Issue Description</th>
+        <th>Issue Status</th>
+        <th>Update TIme</th>
+    </tr>
     {%for iid, dname, title, idscpt, wname, ctime in issue_list%}
-    <li><pre><a href="/issuedetail/?iid={{iid}}">{{iid}}</a>    {{dname}}    {{title}}    {{idscpt}}    {{wname}}    {{ctime}}</pre></li>
+    <tr>
+        <td><a href="/issuedetail/?iid={{iid}}">{{iid}}</a></td>
+        <td>{{dname}}</td>
+        <td>{{title}}</td>
+        <td>{{idscpt}}</td>
+        <td>{{wname}}</td>
+        <td>{{ctime}}</td>
+    </tr>
     {%endfor%}
-</p>
+    </table>
+    </p>
+    </div>
+
 
 <form action="/myissue/" method="post">
            {% if message %}
