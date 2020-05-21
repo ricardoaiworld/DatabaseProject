@@ -232,6 +232,7 @@ def issuedetail(request):
     sql = "SELECT iid FROM assignment WHERE uid=%s"
     cursor.execute(sql, uid)
     iid_list = cursor.fetchall()
+    print(iid_list)
     if (int(global_iid),) in iid_list:
         return render(request, 'login/issuedetail.html', {'issue_history':result, 'issue_current':result1, 'issue_nextstatus':statusname,})
     else:
@@ -288,7 +289,7 @@ def myissue(request):
 def myassignment(request):
     if request.method == 'GET':
         uid = request.session["user_id"]
-        sql = "SELECT iid,dname,title,idscpt,wname,ctime FROM issue NATURAL JOIN workflow NATURAL JOIN user WHERE uid = %s"
+        sql = "SELECT iid,dname,title,idscpt,wname,ctime FROM issue NATURAL JOIN workflow NATURAL JOIN user NATURAL JOIN assignment WHERE uid = %s"
         cursor = db.cursor()
         cursor.execute(sql, [uid])
         my_issue_list = cursor.fetchall()
