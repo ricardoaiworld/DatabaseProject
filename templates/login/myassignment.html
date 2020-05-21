@@ -3,16 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <title>our database project</title>
+    <style>
+    table,th,td{border:1px solid black;}
+    a:link {color:blue;}
+    a:visited {color:blue;}
+    a:hover {color:#FF00FF;}
+    a:active {color:#0000FF;}
+
+    input[type=text], select {
+    width: 20%;
+    padding: 10px 12px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;}
+
+    .button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 8px 28px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;}
+
+    select {
+    width: 20%;
+    padding: 16px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #f1f1f1;}
+
+
+    ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: yellow;}
+    li{float: left;}
+    li a{
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;}
+    li a:hover {
+    background-color: #111;}
+
+    div{
+	width:100%;
+	height:100%;
+	background-color:lightgrey;}
+    </style>
 </head>
 <body>
-<h1>{{ request.session.user_name }},  Welcome back！<a href="/logout/">logout</a></h1>
-<h2>My Issues</h2>
+<h1>{{ request.session.user_name }},  Welcome back！</h1>
+<ul>
+    <li><a href="/logout/">logout</a></li>
+    <li><a href="/index/">back</a></li>
+</ul>
 <p>
-    <ul>
+<div>
+<h2>My Issues</h2>
+     <table>
+        <tr>
+        <th>Project ID</th>
+        <th>Reporter Name</th>
+        <th>Issue Title</th>
+            <th>Issue Description</th>
+            <th>Current Status</th>
+            <th>Update Time</th>
+    </tr>
     {%for iid, dname, title,idscpt,wname,ctime in my_issue_list%}
-    <li><pre><a href="/issuedetail/?iid={{iid}}">{{iid}}</a>    {{dname}}    {{title}}    {{ idscpt }}    {{ wname }}    {{ ctime }}</pre></li>
+         <tr>
+    <td><a href="/issuedetail/?iid={{iid}}">{{iid}}</a></td>
+             <td>{{dname}}</td>
+             <td>{{title}}</td>
+             <td>{{ idscpt }}</td>
+             <td>{{ wname }}</td>
+             <td>{{ ctime }}</td>
+             </tr>
     {%endfor%}
-    </ul>
+        </table>
+    </div>
 </p>
 <form action="/myproject/" method="post">
            {% if message %}
@@ -29,13 +107,8 @@
                 <label for="add_leader">add leader：</label>
                 <input type="text" id="user_id" placeholder="Enter id of the user" name="user_id" required >
             </p>
-            <button type="submit" name="assign">Add</button>
+            <button class="button" type="submit" name="assign">Add</button>
         </form>
-<p>
-    <a href="/index/">back</a>
 
-
-
-</p>
 </body>
 </html>

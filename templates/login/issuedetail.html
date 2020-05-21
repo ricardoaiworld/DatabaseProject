@@ -3,23 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <title>our database project</title>
+    <style>
+    table,th,td{border:1px solid black;}
+    a:link {color:blue;}
+    a:visited {color:blue;}
+    a:hover {color:#FF00FF;}
+    a:active {color:#0000FF;}
+
+    input[type=text], select {
+    width: 20%;
+    padding: 10px 12px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;}
+
+    .button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 8px 28px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;}
+
+    select {
+    width: 20%;
+    padding: 16px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #f1f1f1;}
+
+
+    ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: yellow;}
+    li{float: left;}
+    li a{
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;}
+    li a:hover {
+    background-color: #111;}
+
+    div{
+	width:100%;
+	height:100%;
+	background-color:lightgrey;}
+    </style>
 </head>
 <body>
 <h1>{{ request.session.user_name }},  Welcome back！</h1>
+<ul>
+    <li><a href="/logout/">logout</a></li>
+    <li><a href="/index/">back</a></li>
+</ul>
+<div>
 <h2>Issue Log History</h2>
 <p>
-<ul>
+    <table>
+    <tr>
+        <th>Issue ID</th>
+        <th>Project ID</th>
+        <th>Update Time</th>
+        <th>status afert Update</th>
+        <th>Operator</th>
+        <th>previous status</th>
+    </tr>
     {%for iid, pid, updatedata, new_wname, dname, wname in issue_history%}
-    <li><pre> {{iid}}   {{pid}}    {{updatedata}}    {{new_wname}}    {{dname}}    {{wname}}</pre></li>
+    <tr>
+        <td> {{iid}} </td>
+        <td> {{pid}} </td>
+        <td>{{updatedata}}</td>
+        <td>{{new_wname}}</td>
+        <td>{{dname}}</td>
+        <td>{{wname}}</td>
+    </tr>
     {%endfor%}
-    </ul>
+    </table>
 </p>
-<h3>Current Status</h3>
-<p>
-<ul>
-    <li><pre>{{issue_current.0}}    {{issue_current.1}}    {{issue_current.2}}    {{issue_current.3}}    {{issue_current.4}}    {{issue_current.5}}</pre></li>
-    </ul>
-</p>
+    </div>
+<div>
+<h3>Current Issue Information</h3>
+    <table>
+        <tr>
+        <th>Issue ID</th>
+        <th>User Name</th>
+        <th>Issue Title</th>
+        <th>Issue Description</th>
+        <th>Current status</th>
+        <th>Update Time</th>
+        </tr>
+        <tr>
+            <td>{{issue_current.0}}</td>
+            <td>{{issue_current.1}}</td>
+            <td>{{issue_current.2}}</td>
+            <td>{{issue_current.3}}</td>
+            <td> {{issue_current.4}}</td>
+            <td>{{issue_current.5}}</td>
+        </tr>
+    </table>
+    </div>
 
  <form action="/issuedetail/" method="post">
            {% if message %}
@@ -32,7 +125,7 @@
                 <label for="issue_descr">IssueDescr：</label>
                 <input type="text" id="issue_descr" placeholder="New Descr" name="IssueDescr" required >
             </p>
-            <button type="submit" name="button1">Apply Change</button>
+            <button class="button" type="submit" name="button1">Apply Change</button>
         </form>
 
 <p>
@@ -48,12 +141,8 @@
                     {%endfor%}
                 </select>
             </p>
-            <button type="submit" name="button2">Change Status</button>
+            <button class="button" type="submit" name="button2">Change Status</button>
         </form>
-</p>
-<p>
-    <a href="/logout/">logout</a>
-    <a href="/index/">back</a>
 </p>
 </body>
 </html>

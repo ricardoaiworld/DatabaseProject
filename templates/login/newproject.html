@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>our database project</title>
+    <style>
+    table,th,td{border:1px solid black;}
+    a:link {color:blue;}
+    a:visited {color:blue;}
+    a:hover {color:#FF00FF;}
+    a:active {color:#0000FF;}
+
+    input[type=text], select {
+    width: 20%;
+    padding: 10px 12px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;}
+
+    .button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 8px 28px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;}
+
+    select {
+    width: 20%;
+    padding: 16px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #f1f1f1;}
+
+
+    ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: yellow;}
+    li{float: left;}
+    li a{
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;}
+    li a:hover {
+    background-color: #111;}
+
+    div{
+	width:100%;
+	height:100%;
+	background-color:lightgrey;}
+    </style>
+</head>
+<body>
+<h1>{{ request.session.user_name }},  This is Page for creating project</h1>
+<ul>
+    <li><a href="/logout/">logout</a></li>
+    <li><a href="/index/">Finish Creation</a></li>
+</ul>
+<p>
+<div>
+<h2>Available Workflow</h2>
+    <table>
+        <tr>
+            <th>Workflow ID</th>
+            <th>Workflow Name</th>
+        </tr>
+    {%for wid, wname in available_workflow%}
+        <tr>
+            <td> {{wid}}</td>
+            <td> {{wname}}</td>
+        </tr>
+    {%endfor%}
+        </table>
+    </div>
+<p>
+<div>
+<h3>Your Workflow Design</h3>
+    <table>
+        <tr>
+            <th>Workflow ID</th>
+            <th>Next Workflow ID</th>
+        </tr>
+    {%for wid, next_wid in current_workflow%}
+        <tr>
+            <td> {{wid}} </td>
+            <td>{{next_wid}}</td>
+        </tr>
+    {%endfor%}
+        </table>
+    </div>
+</p>
+<form action="/newproject/" method="POST">
+            {% if message %}
+               <div class="alert alert-warning">{{ message }}</div>
+           {% endif %}
+           {% csrf_token %}<p>
+    <label for="previousWorkflow">previous Wokflow</label>
+    <input type="text" id="previousWorkflow" name="previousWorkflow" placeholder="Enter previous Workflow" required/>
+    <label for="next_Workflow">Next Workflow</label>
+    <input type="text" id="next_Workflow" name="next_Workflow" placeholder="Enter Next Workflow" required/>
+    <button class="button" type="submit" name="button1">Add Workflow relationship</button>
+</p>
+</form>
+<form action="/newproject/" method="POST">
+            {% if message %}
+               <div class="alert alert-warning">{{ message }}</div>
+           {% endif %}
+           {% csrf_token %}
+<p>
+    <label for="new_workflow">Next Wokflow</label>
+    <input type="text" id="new_workflow" name="new_workflow" placeholder="Enter Name of this Wokflow" required/>
+    <button class="button" type="submit" name="button2">Add New Workflow</button>
+</p>
+</form>
+
+</body>
+</html>
