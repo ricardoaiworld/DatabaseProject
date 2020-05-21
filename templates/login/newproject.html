@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>our database project</title>
+</head>
+<body>
+<h1>{{ request.session.user_name }},  This is Page for creating project</h1>
+<h2>Available Workflow</h2>
+<p>
+    <ul>
+    {%for wid, wname in available_workflow%}
+    <li><pre>{{wid}}    {{wname}}</pre></li>
+    {%endfor%}
+    </ul>
+<h3>Your Workflow Design</h3>
+<p>
+     <ul>
+    {%for wid, next_wid in current_workflow%}
+    <li><pre>{{wid}}    {{next_wid}}</pre></li>
+    {%endfor%}
+    </ul>
+</p>
+<form action="/newproject/" method="POST">
+            {% if message %}
+               <div class="alert alert-warning">{{ message }}</div>
+           {% endif %}
+           {% csrf_token %}<p>
+    <label for="previousWorkflow">previous Wokflow</label>
+    <input type="text" id="previousWorkflow" name="previousWorkflow" placeholder="Enter previous Workflow" required/>
+    <label for="next_Workflow">Next Workflow</label>
+    <input type="text" id="next_Workflow" name="next_Workflow" placeholder="Enter Next Workflow" required/>
+    <button type="submit" name="button1">Add Workflow relationship</button>
+</p>
+</form>
+<form action="/newproject/" method="POST">
+            {% if message %}
+               <div class="alert alert-warning">{{ message }}</div>
+           {% endif %}
+           {% csrf_token %}
+<p>
+    <label for="new_workflow">Next Wokflow</label>
+    <input type="text" id="new_workflow" name="new_workflow" placeholder="Enter Name of this Wokflow" required/>
+    <button type="submit" name="button2">Add New Workflow</button>
+</p>
+</form>
+<p>
+    <a href="/logout/">logout</a>
+</p>
+</body>
+</html>
