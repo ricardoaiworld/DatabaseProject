@@ -72,7 +72,7 @@
 <h2>My Issues</h2>
      <table>
         <tr>
-        <th>Project ID</th>
+        <th>Issue ID</th>
         <th>Reporter Name</th>
         <th>Issue Title</th>
             <th>Issue Description</th>
@@ -92,23 +92,7 @@
         </table>
     </div>
 </p>
-<form action="/myproject/" method="post">
-           {% if message %}
-               <div class="alert alert-warning">{{ message }}</div>
-           {% endif %}
-           {% csrf_token %}
-            <p>
-                <label for="project">project：</label>
-                <select name="project_id">
-                    {%for item in my_project_list%}
-                        <option value="{{ item.0 }}">{{ item.0 }}</option>
-                    {%endfor%}
-                </select>
-                <label for="add_leader">add leader：</label>
-                <input type="text" id="user_id" placeholder="Enter id of the user" name="user_id" required >
-            </p>
-            <button class="button" type="submit" name="assign">Add</button>
-        </form>
+
 
 </body>
 </html>

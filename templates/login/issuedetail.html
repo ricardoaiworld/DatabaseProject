@@ -125,7 +125,11 @@
                 <label for="issue_descr">IssueDescr：</label>
                 <input type="text" id="issue_descr" placeholder="New Descr" name="IssueDescr" required >
             </p>
-            <button class="button" type="submit" name="button1">Apply Change</button>
+            {% if permission %}
+                <button  class="button" type="submit" name="button1" disabled>Apply Change</button>
+            {% else %}
+                <button  class="button" type="submit" name="button1">Apply Change</button>
+            {% endif %}
         </form>
 
 <p>
@@ -141,7 +145,11 @@
                     {%endfor%}
                 </select>
             </p>
-            <button class="button" type="submit" name="button2">Change Status</button>
+            {% if permission %}
+                <button  class="button" type="submit" name="button2" disabled>Change Status</button>
+            {% else %}
+                <button  class="button" type="submit" name="button2">Change Status</button>
+            {% endif %}
         </form>
 </p>
 </body>
