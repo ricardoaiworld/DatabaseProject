@@ -4,8 +4,8 @@ import pymysql
 from django.http import HttpResponse
 
 
-db = pymysql.connect("localhost", "root", "12345678", "Bug_Report")
-#db=pymysql.connect("localhost", "root", "root", "Bug_Report")
+#db = pymysql.connect("localhost", "root", "12345678", "Bug_Report")
+db=pymysql.connect("localhost", "root", "root", "Bug_Report")
 
 
 def login(request):
@@ -13,6 +13,8 @@ def login(request):
         return redirect('/index')
     if request.method == "GET":
         return render(request, 'login/login.html')
+    if request.method=="POST" and "button_register" in request.POST:
+        return render(request, 'login/login.html', locals())
     else:
         username = request.POST['username']
         password = request.POST['password']
@@ -47,6 +49,20 @@ def logout(request):
     request.session.flush()
     return redirect("/login/")
 
+def register(request):
+    if request.method == "POST" and "button_register" not in request.POST and "button_back" not in request.POST:
+        return render(request, 'login/register.html')
+    if request.method=="POST" and "button_register" in request.POST:
+        sql="insert into `user`(dname,email,uname,pswd) values(%s,%s,%s,%s)"
+        cursor=db.cursor()
+        cursor.execute(sql,[request.POST.get('dname'),request.POST.get('email'),request.POST.get('nickname'),request.POST.get('password')])
+        db.commit()
+        return redirect("/login/")
+    if request.method=="POST" and "button_back" in request.POST:
+        return redirect("/login/")
+
+
+
 
 def index(request):
     if not request.session.get('is_login', None):
@@ -73,7 +89,7 @@ def newproject(request):
         cursor.execute(sql,project_title)
         newprojectId=cursor.fetchone()
         request.session['newprojectId'] =newprojectId
-        sql = "insert into flowrelationship values(1,5,%s)"
+        sql = "insert into flowrelationship values(%s,1,5)"
         cursor.execute(sql, newprojectId)
         sql= "insert into `lead` values(%s,%s)"
         cursor.execute(sql,[newprojectId,request.session['user_id']])
@@ -89,7 +105,7 @@ def newproject(request):
         cursor.execute(sql, [])
         available_workflow = cursor.fetchall()
         sql = "insert into flowrelationship values(%s,%s,%s)"
-        cursor.execute(sql,[request.POST.get('previousWorkflow'),request.POST.get('next_Workflow'),newprojectId])
+        cursor.execute(sql,[newprojectId,request.POST.get('previousWorkflow'),request.POST.get('next_Workflow')])
         db.commit()
         sql = "select wid,next_wid from flowrelationship where pid=%s"
         cursor.execute(sql, newprojectId)

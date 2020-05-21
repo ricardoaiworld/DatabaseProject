@@ -30,5 +30,6 @@ urlpatterns = [
     re_path(r'^myproject/$', views.myproject),
     re_path(r'^myassignment/$', views.myassignment),
     re_path(r'^myissue/$', views.myissue),
+    re_path(r'^register/$', views.register),
 
 ]

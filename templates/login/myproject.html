@@ -3,16 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <title>our database project</title>
+    <style>
+    table,th,td{border:1px solid black;}
+    a:link {color:blue;}
+    a:visited {color:blue;}
+    a:hover {color:#FF00FF;}
+    a:active {color:#0000FF;}
+
+    input[type=text], select {
+    width: 20%;
+    padding: 10px 12px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;}
+
+    .button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 8px 28px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;}
+
+    select {
+    width: 20%;
+    padding: 16px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #f1f1f1;}
+
+
+    ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: yellow;}
+    li{float: left;}
+    li a{
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;}
+    li a:hover {
+    background-color: #111;}
+
+    div{
+	width:100%;
+	height:100%;
+	background-color:lightgrey;}
+    </style>
 </head>
 <body>
-<h1>{{ request.session.user_name }},  Welcome back！<a href="/logout/">logout</a></h1>
-<h2>My Projects</h2>
-<p>
-    <ul>
-    {%for pid, pname, pdscpt in my_project_list%}
-    <li><pre><a href="/myissue/?pid={{pid}}">{{pid}}</a>    {{pname}}    {{pdscpt}}    </pre></li>
-    {%endfor%}
+<h1>{{ request.session.user_name }},  Welcome back！</h1>
+<ul>
+    <li><a href="/index/">back</a></li>
+    <li><a href="/logout/">logout</a></li>
     </ul>
+<p>
+<div>
+<h2>My Projects</h2>
+    <table>
+        <tr>
+        <th>Project ID</th>
+        <th>Project Name</th>
+        <th>Project Description</th>
+    </tr>
+    {%for pid, pname, pdscpt in my_project_list%}
+        <tr>
+            <td><a href="/myissue/?pid={{pid}}">{{pid}}</a></td>
+            <td>{{pname}}</td>
+            <td>{{pdscpt}}</td>
+            {%endfor%}
+        </tr>
+    </table>
+    </div>
 </p>
 <form action="/myproject/" method="post">
            {% if message %}
@@ -20,22 +92,19 @@
            {% endif %}
            {% csrf_token %}
             <p>
-                <label for="project">project：</label>
+                <label for="project">Select Project：</label>
                 <select name="project_id">
                     {%for item in my_project_list%}
                         <option value="{{ item.0 }}">{{ item.0 }}</option>
                     {%endfor%}
                 </select>
-                <label for="add_leader">add leader：</label>
-                <input type="text" id="user_id" placeholder="Enter id of the user" name="user_id" required >
             </p>
-            <button type="submit" name="assign">Add</button>
+                <p>
+                <label for="add_leader">Add Leader：</label>
+                <input type="text" id="user_id" placeholder="Enter User ID" name="user_id" required >
+            </p>
+            <button class="button" type="submit" name="assign">Add</button>
         </form>
-<p>
-    <a href="/index/">back</a>
 
-
-
-</p>
 </body>
 </html>

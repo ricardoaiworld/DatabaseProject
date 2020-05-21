@@ -3,17 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <title>our database project</title>
+    <style>
+    table,th,td{border:1px solid black;}
+    a:link {color:000000;}
+    a:visited {color:blue;}
+    a:hover {color:#FF00FF;}
+    a:active {color:#0000FF;}
+
+    input[type=text], select {
+    width: 20%;
+    padding: 10px 12px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;}
+
+    .button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 8px 28px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;}
+
+    select {
+    width: 20%;
+    padding: 16px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #f1f1f1;}
+
+
+    ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: yellow;}
+    li{float: left;}
+    li a{
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;}
+    li a:hover {
+    background-color: #111;}
+
+    div{
+	width:100%;
+	height:100%;
+	background-color:lightgrey;}
+    </style>
 </head>
 <body>
 <h1>{{ request.session.user_name }},  Welcome back！</h1>
+    <ul>
+    <li><a href="/logout/">logout</a></li>
+    <li><a href="/index/">back</a></li>
+    </ul>
+<div>
 <h2>Issue List</h2>
 <p>
-<ul>
+    <table>
+    <tr>
+        <th>Issue Id</th>
+        <th>Project Name</th>
+        <th>Issue Title</th>
+        <th>Issue Describe</th>
+        <th>Current Status</th>
+        <th>Last update time</th>
+    </tr>
     {%for iid, dname, title, idscpt, wname, ctime in issue_list%}
-    <li><pre><a href="/issuedetail/?iid={{iid}}">{{iid}}</a>    {{dname}}    {{title}}    {{idscpt}}    {{wname}}    {{ctime}}</pre></li>
+    <tr>
+    <td><a href="/issuedetail/?iid={{iid}}">{{iid}}</a> </td>
+        <td>{{dname}}</td>
+        <td>{{title}}</td>
+        <td>{{idscpt}}</td>
+        <td>{{wname}}</td>
+        <td>{{ctime}}</td>
+    </tr>
     {%endfor%}
-    </ul>
+    </table>
 </p>
+    </div>
 
 <form action="/projectdetail/" method="post">
     {% if message %}
@@ -26,7 +104,7 @@
          <input type="text" id="new_issue_title" name="title" placeholder="new_title"  required />
          <label for="new_issue_describe">describe：</label>
          <input type="text" id="new_issue_describe" name="describe" placeholder="new_describe"  required />
-         <button type="submit" name="button1">Report This New Issue</button>
+         <button class="button" type="submit" name="button1">Report This New Issue</button>
     </p>
 
 </form>
@@ -38,7 +116,7 @@
     <p>
         <label for="search_title">search_title</label>
         <input type="text" id="search_title" name="search_title" placeholder="Enter what issue title you want to search" required/>
-        <button type="submit" name="button2">Search Issue table by issue title</button>
+        <button class="button" type="submit" name="button2">Search Issue table by issue title</button>
     </p>
 </form>
 
@@ -50,7 +128,7 @@
     <p>
         <label for="search_name">search_name</label>
         <input type="text" id="search_name" name="search_name" placeholder="Enter what user name you want to search" required/>
-        <button type="submit" name="button3">Filter Issue by user name</button>
+        <button class="button" type="submit" name="button3">Filter Issue by user name</button>
     </p>
 </form>
 
@@ -66,14 +144,9 @@
                     <option value="168">During 1 Week</option>
                     <option value="720">During 1 One Month</option>
                 </select>
-                <button type="submit" name="button4">Filter By Time </button>
+                <button class="button" type="submit" name="button4">Filter By Time </button>
             </p>
 
         </form>
-
-<p>
-    <a href="/logout/">logout</a>
-    <a href="/index/">back</a>
-</p>
 </body>
 </html>

@@ -56,43 +56,35 @@
     </style>
 </head>
 <body>
-<h1>{{ request.session.user_name }},  Welcome back！</h1>
-<ul>
-<li><a href="/myproject/?uid={{request.session.user_id}}">{{"my projects"}}</a></li>
-<li><a href="/myassignment/?uid={{request.session.user_id}}">{{"issues assigned to me"}}</a></li>
-<li><a href="/logout/">logout</a></li>
-</ul>
-<p>
-<div>
-    <h2>Project List</h2>
-    <table>
-    <tr>
-        <th>pid</th>
-        <th>pname</th>
-        <th>pdscpt</th>
-    </tr>
-    {%for pid, pname, uid, pdscpt in record_list%}
-    <tr>
-    <td><a href="/projectdetail/?pid={{pid}}">{{pid}}</a> </td>
-        <td>{{pname}} </td>
-        <td>{{pdscpt}}</td>
-    {%endfor%}
-    </tr>
-    </table>
-    </div>
-</p>
+
+
 
 <p>
-    <form action="/newproject/" method="POST">
+    <form action="/register/" method="POST">
     {% if message %}
         <div class="alert alert-warning">{{ message }}</div>
     {% endif %}
     {% csrf_token %}
-    <label for="project_title"></label>
-    <input type="text" id="project_title" name="project_title" placeholder="Enter the title of New Project" required/>
-    <label for="project_des"></label>
-    <input type="text" id="project_des" name="project_des" placeholder="Enter the description of New Project" required/>
-    <button class="button" type="submit" name="button_submit">Create New Project</button>
+    <p>
+    <label for="dname">User Name</label>
+    <input type="text" id="dname" name="dname" placeholder="Enter your User Name" required/>
+    </p>
+    <p>
+    <label for="email">Email</label>
+    <input type="text" id="email" name="email" placeholder="Enter your email" required/>
+    </p>
+    <p>
+    <label for="nickname">Nickname</label>
+    <input type="text" id="nickname" name="nickname" placeholder="Enter your nickname" required/>
+        </p>
+<p>
+    <label for="password">Password</label>
+    <input type="text" id="password" name="password" placeholder="Enter your password" required/>
+    </p>
+    <button class="button" type="submit" name="button_register">Register</button>
+    </form>
+    <form action="/login/">
+        <button class="button" type="submit" name="button_back">Back</button>
     </form>
 
 </p>
