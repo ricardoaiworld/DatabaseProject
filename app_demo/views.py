@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 import pymysql
 from django.template.defaultfilters import escape
+from django.contrib.auth.hashers import make_password, check_password
 
 
 db = pymysql.connect("localhost", "root", "12345678", "Bug_Report")
@@ -28,10 +29,8 @@ def login(request):
                 message = "No such user"
                 return render(request, 'login/login.html', locals())
             else:
-                #when result is null
-                #uid, pswd = result report error
                 uid, pswd = result
-                if pswd == password:
+                if check_password(password,pswd):
                     request.session['is_login'] = True
                     request.session['user_id'] = uid
                     request.session['user_name'] = username
@@ -49,19 +48,19 @@ def logout(request):
     request.session.flush()
     return redirect("/login/")
 
+
 def register(request):
     if request.method == "POST" and "button_register" not in request.POST and "button_back" not in request.POST:
         return render(request, 'login/register.html')
     if request.method=="POST" and "button_register" in request.POST:
         sql="insert into `user`(dname,email,uname,pswd) values(%s,%s,%s,%s)"
         cursor=db.cursor()
-        cursor.execute(sql,[request.POST.get('dname'),request.POST.get('email'),request.POST.get('nickname'),request.POST.get('password')])
+        password = make_password(request.POST.get('password'))
+        cursor.execute(sql,[request.POST.get('dname'),request.POST.get('email'),request.POST.get('nickname'), password])
         db.commit()
         return redirect("/login/")
     if request.method=="POST" and "button_back" in request.POST:
         return redirect("/login/")
-
-
 
 
 def index(request):
@@ -72,7 +71,6 @@ def index(request):
     cursor.execute(sql, [])
     result = cursor.fetchall()
     return render(request, 'login/index.html', {'record_list': result})
-
 
 
 def newproject(request):
@@ -128,7 +126,6 @@ def newproject(request):
         cursor.execute(sql, newprojectId)
         current_workflow = cursor.fetchall()
         return render(request,'login/newproject.html', {'available_workflow': available_workflow, 'current_workflow': current_workflow})
-
 
 
 def projectdetail(request):
@@ -265,6 +262,7 @@ def myproject(request):
         cursor.execute(sql, [uid])
         my_project_list = cursor.fetchall()
         return render(request, 'login/myproject.html', {'my_project_list': my_project_list})
+
 
 def myissue(request):
     if request.method == 'GET':
